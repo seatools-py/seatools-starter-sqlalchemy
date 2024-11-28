@@ -32,7 +32,7 @@ setup(
     install_requires=requirements,
     extras_require={},
     license="MIT license",
-    long_description=readme,
+    long_description='',
     include_package_data=True,
     keywords=['seatools', 'ioc', 'starter', 'sqlalchemy'],
     name='seatools-starter-sqlalchemy',
