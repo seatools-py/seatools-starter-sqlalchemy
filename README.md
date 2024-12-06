@@ -8,19 +8,21 @@ seatools ioc 的 sqlalchemy 启动器
 
 ## 使用指南
 1. 安装, `poetry add seatools-starter-sqlalchemy`
-2. 配置文件配置如下
+2. 配置文件`config/application.yml`配置如下
 ```yaml
 # 数据库配置
-db:
-  # bean名称
-  demo_db:
-    host: xxx
-    port: 1234
-    user: xxx
-    password: sss
-    db: xxx
-    orm_schema: sqlite # 其他示例, sqlite+aiosqlite (异步), mysql+pymysql, hive, clickhouse 等
-    primary: false # 是否默认bean
+seatools:
+  datasource:
+    # 数据库bean名称
+    demo_db:
+      host: xxx
+      port: 1234
+      user: xxx
+      password: sss
+      db: xxx
+      driver: sqlite # sqlalchemy schema数据库驱动, 示例: sqlite+aiosqlite (异步), mysql+pymysql, hive, clickhouse 等
+      primary: false # 是否默认bean
+      is_async: false # 是否异步, 若driver是异步驱动则该值需要改为true
 ```
 3. 使用示例
 ```python

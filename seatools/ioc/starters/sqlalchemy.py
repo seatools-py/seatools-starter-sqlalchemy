@@ -8,12 +8,18 @@ from seatools.sqlalchemy.dbconfig import CommonDBConfig
 
 @Bean
 def init_db_beans():
-    if 'db' not in cfg():
-        logger.warning('配置不存在[db]属性, 无法自动初始化数据库bean实例')
+    db_config = None
+    config = cfg()
+    if 'seatools' in config and 'datasource' in config['seatools']:
+        db_config = config['seatools']['datasource']
+    # 兼容旧配置
+    if 'db' in config:
+        db_config = config['db']
+    if not db_config:
+        logger.warning('配置[seatools.datasource]不存在, 无法自动初始化数据库bean实例')
         return
-    db_config = cfg()['db']
     if not isinstance(db_config, dict):
-        logger.error('配置[db]属性不是字典类型, 无法自动初始化数据库bean实例')
+        logger.error('配置[seatools.datasource]属性不是字典类型, 无法自动初始化数据库bean实例')
         exit(1)
     for name, v in db_config.items():
         try:
