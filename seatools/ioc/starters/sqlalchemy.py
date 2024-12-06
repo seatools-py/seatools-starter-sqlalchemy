@@ -17,7 +17,7 @@ def init_db_beans():
         db_config = config['db']
 
     # 兼容旧配置sqlalchemy
-    sqlalchemy_config = (config.get('seatools') or config).get('sqlalchemy')
+    sqlalchemy_config = (config.get('seatools') or {}).get('sqlalchemy') or config.get('sqlalchemy')
 
     if not db_config:
         logger.warning('配置[seatools.datasource]不存在, 无法自动初始化数据库bean实例')
