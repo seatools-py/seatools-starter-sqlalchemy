@@ -13,7 +13,7 @@ def init_db_beans():
     if 'seatools' in config and 'datasource' in config['seatools']:
         db_config = config['seatools']['datasource']
     # 兼容旧配置
-    if 'db' in config:
+    elif 'db' in config:
         db_config = config['db']
     if not db_config:
         logger.warning('配置[seatools.datasource]不存在, 无法自动初始化数据库bean实例')
