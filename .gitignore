@@ -1,4 +1,5 @@
 .idea/
 build/
 dist/
-seatools_codegen.egg-info/
+seatools_starter_sqlalchemy.egg-info
+
