@@ -8,13 +8,17 @@ from seatools.sqlalchemy.dbconfig import CommonDBConfig
 
 @Bean
 def init_db_beans():
-    db_config = None
+    db_config, sqlalchemy_config = None, None
     config = cfg()
     if 'seatools' in config and 'datasource' in config['seatools']:
         db_config = config['seatools']['datasource']
     # 兼容旧配置
     elif 'db' in config:
         db_config = config['db']
+
+    # 兼容旧配置sqlalchemy
+    sqlalchemy_config = (config.get('seatools') or config).get('sqlalchemy')
+
     if not db_config:
         logger.warning('配置[seatools.datasource]不存在, 无法自动初始化数据库bean实例')
         return
@@ -24,7 +28,6 @@ def init_db_beans():
     for name, v in db_config.items():
         try:
             config = CommonDBConfig(**v)
-            sqlalchemy_config = cfg().get('sqlalchemy')
             if config.sqlalchemy:
                 if not sqlalchemy_config:
                     sqlalchemy_config = config.sqlalchemy

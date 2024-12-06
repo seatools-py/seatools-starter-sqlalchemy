@@ -10,8 +10,13 @@ seatools ioc 的 sqlalchemy 启动器
 1. 安装, `poetry add seatools-starter-sqlalchemy`
 2. 配置文件`config/application.yml`配置如下
 ```yaml
-# 数据库配置
+# seatools 配置
 seatools:
+  # sqlalchemy 配置
+  sqlalchemy:
+    echo: false
+    pool_cycle: 3600
+  # 数据库配置
   datasource:
     # 数据库bean名称
     demo_db:
