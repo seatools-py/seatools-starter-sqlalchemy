@@ -28,6 +28,9 @@ seatools:
       driver: sqlite # sqlalchemy schema数据库驱动, 示例: sqlite+aiosqlite (异步), mysql+pymysql, hive, clickhouse 等
       primary: false # 是否默认bean
       is_async: false # 是否异步, 若driver是异步驱动则该值需要改为true
+      # 单独数据库的sqlalchemy覆盖配置
+      sqlalchemy:
+        echo: true
 ```
 3. 使用示例
 ```python
