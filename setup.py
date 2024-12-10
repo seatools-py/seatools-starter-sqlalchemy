@@ -36,7 +36,7 @@ setup(
     include_package_data=True,
     keywords=['seatools', 'ioc', 'starter', 'sqlalchemy'],
     name='seatools-starter-sqlalchemy',
-    packages=find_packages(include=['seatools.ioc.starters', 'seatools.ioc.starters.*']),
+    packages=find_packages(include=['seatools.ioc.starters.sqlalchemy', 'seatools.ioc.starters.sqlalchemy.*']),
     test_suite='tests',
     tests_require=test_requirements,
     url='https://gitee.com/seatools-py/seatools-starter-sqlalchemy',
