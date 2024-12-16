@@ -1,4 +1,5 @@
 from seatools.ioc.config import cfg
+from seatools.ioc.base import get_bean_factory
 from seatools.ioc.injects import Bean
 from seatools.sqlalchemy.utils import new_client
 from seatools.utils.dict_utils import deep_update
@@ -25,6 +26,7 @@ def init_db_beans():
     if not isinstance(db_config, dict):
         logger.error('配置[seatools.datasource]属性不是字典类型, 无法自动初始化数据库bean实例')
         exit(1)
+    bean_factory = get_bean_factory()
     for name, v in db_config.items():
         try:
             config = CommonDBConfig(**v)
@@ -34,8 +36,8 @@ def init_db_beans():
                 else:
                     sqlalchemy_config = deep_update(sqlalchemy_config, config.sqlalchemy)
             client = new_client(config, config=sqlalchemy_config)
-            # 注册bean
-            Bean(name=config.name or name, primary=config.primary)(client)
+            # 注册bean, 非延迟注册
+            bean_factory.register_bean(name=config.name or name, cls=client, primary=config.primary, lazy=False)
         except Exception as e:
             logger.error(f'配置[db.{name}]存在不支持的参数, 请检查修改配置后重试')
             exit(1)
