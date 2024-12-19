@@ -7,6 +7,14 @@ from loguru import logger
 from seatools.sqlalchemy.dbconfig import CommonDBConfig
 
 
+
+def __get_session_cls(module_cls: str):
+    import importlib
+    module_cls_seq = module_cls.split('.')
+    module_name, class_name = '.'.join(module_cls_seq[:-1]), module_cls_seq[-1]
+    return getattr(importlib.import_module(module_name) if module_name else globals(), class_name, None)
+
+
 @Bean
 def init_db_beans():
     db_config, sqlalchemy_config = None, None
@@ -35,10 +43,15 @@ def init_db_beans():
                     sqlalchemy_config = config.sqlalchemy
                 else:
                     sqlalchemy_config = deep_update(sqlalchemy_config, config.sqlalchemy)
+            if sqlalchemy_config and 'session_cls' in sqlalchemy_config:
+                cls = __get_session_cls(sqlalchemy_config['session_cls'])
+                if cls is not None:
+                    sqlalchemy_config['cls'] = cls
+                else:
+                    del sqlalchemy_config['session_cls']
             client = new_client(config, config=sqlalchemy_config)
             # 注册bean, 非延迟注册
             bean_factory.register_bean(name=config.name or name, cls=client, primary=config.primary, lazy=False)
         except Exception as e:
             logger.error(f'配置[seatools.datasource.{name}]存在不支持的参数, 请检查修改配置后重试')
             exit(1)
-
