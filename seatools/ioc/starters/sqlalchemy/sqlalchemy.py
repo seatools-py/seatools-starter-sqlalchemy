@@ -1,3 +1,5 @@
+import importlib
+
 from seatools.ioc.config import cfg
 from seatools.ioc.base import get_bean_factory
 from seatools.ioc.injects import Bean
@@ -9,7 +11,6 @@ from seatools.sqlalchemy.dbconfig import CommonDBConfig
 
 
 def __get_session_cls(module_cls: str):
-    import importlib
     module_cls_seq = module_cls.split('.')
     module_name, class_name = '.'.join(module_cls_seq[:-1]), module_cls_seq[-1]
     return getattr(importlib.import_module(module_name) if module_name else globals(), class_name, None)
