@@ -39,6 +39,6 @@ def init_db_beans():
             # 注册bean, 非延迟注册
             bean_factory.register_bean(name=config.name or name, cls=client, primary=config.primary, lazy=False)
         except Exception as e:
-            logger.error(f'配置[db.{name}]存在不支持的参数, 请检查修改配置后重试')
+            logger.error(f'配置[seatools.datasource.{name}]存在不支持的参数, 请检查修改配置后重试')
             exit(1)
 
