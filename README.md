@@ -31,6 +31,8 @@ seatools:
       # 单独数据库的sqlalchemy覆盖配置
       sqlalchemy:
         echo: true
+        # 1.0.6版本支持自定义Session, 默认同步为sqlalchemy.orm.Session, 异步为sqlalchemy.ext.asyncio.AsyncSession
+        session_cls: sqlalchemy.orm.Session # 可改为其他Session, 例如: sqlmodel.orm.Session (需要安装sqlmodel)
 ```
 3. 使用示例
 ```python
