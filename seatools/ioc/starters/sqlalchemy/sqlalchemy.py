@@ -47,7 +47,7 @@ def init_db_beans():
             if sqlalchemy_config and 'session_cls' in sqlalchemy_config:
                 cls = __get_session_cls(sqlalchemy_config['session_cls'])
                 if cls is not None:
-                    sqlalchemy_config['cls'] = cls
+                    sqlalchemy_config['session_cls'] = cls
                 else:
                     del sqlalchemy_config['session_cls']
             client = new_client(config, config=sqlalchemy_config)
