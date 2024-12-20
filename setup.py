@@ -40,6 +40,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://gitee.com/seatools-py/seatools-starter-sqlalchemy',
-    version='1.0.6',
+    version='1.0.7',
     zip_safe=False,
 )
