@@ -9,8 +9,8 @@ The SQLAlchemy starter for seatools ioc.
 2. https://gitee.com/seatools-py/seatools-starter-sqlalchemy
 
 ## Usage Guide
-1. Install with poetry add seatools-starter-sqlalchemy
-2. Configure the config/application.yml file as follows:
+1. Install with `poetry add seatools-starter-sqlalchemy`
+2. Configure the `config/application.yml` file as follows:
 ```yaml
 # seatools configuration
 seatools:
