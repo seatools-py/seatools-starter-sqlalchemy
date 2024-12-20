@@ -22,37 +22,33 @@ def init_db_beans():
     config = cfg()
     if 'seatools' in config and 'datasource' in config['seatools']:
         db_config = config['seatools']['datasource']
-    # 兼容旧配置
+    # Backward compatibility with old configuration
     elif 'db' in config:
         db_config = config['db']
 
-    # 兼容旧配置sqlalchemy
+    # Backward compatibility with old sqlalchemy configuration
     sqlalchemy_config = (config.get('seatools') or {}).get('sqlalchemy') or config.get('sqlalchemy')
 
     if not db_config:
-        logger.warning('配置[seatools.datasource]不存在, 无法自动初始化数据库bean实例')
+        logger.warning('Configuration [seatools.datasource] does not exist, unable to automatically initialize database bean instances.')
         return
     if not isinstance(db_config, dict):
-        logger.error('配置[seatools.datasource]属性不是字典类型, 无法自动初始化数据库bean实例')
+        logger.error('Configuration [seatools.datasource] property is not of dict type, unable to automatically initialize database bean instances.')
         exit(1)
     bean_factory = get_bean_factory()
     for name, v in db_config.items():
-        try:
-            config = CommonDBConfig(**v)
-            if config.sqlalchemy:
-                if not sqlalchemy_config:
-                    sqlalchemy_config = config.sqlalchemy
-                else:
-                    sqlalchemy_config = deep_update(sqlalchemy_config, config.sqlalchemy)
-            if sqlalchemy_config and 'session_cls' in sqlalchemy_config:
-                cls = __get_session_cls(sqlalchemy_config['session_cls'])
-                if cls is not None:
-                    sqlalchemy_config['session_cls'] = cls
-                else:
-                    del sqlalchemy_config['session_cls']
-            client = new_client(config, config=sqlalchemy_config)
-            # 注册bean, 非延迟注册
-            bean_factory.register_bean(name=config.name or name, cls=client, primary=config.primary, lazy=False)
-        except Exception as e:
-            logger.error(f'配置[seatools.datasource.{name}]存在不支持的参数, 请检查修改配置后重试')
-            exit(1)
+        config = CommonDBConfig(**v)
+        if config.sqlalchemy:
+            if not sqlalchemy_config:
+                sqlalchemy_config = config.sqlalchemy
+            else:
+                sqlalchemy_config = deep_update(sqlalchemy_config, config.sqlalchemy)
+        if sqlalchemy_config and 'session_cls' in sqlalchemy_config:
+            cls = __get_session_cls(sqlalchemy_config['session_cls'])
+            if cls is not None:
+                sqlalchemy_config['session_cls'] = cls
+            else:
+                del sqlalchemy_config['session_cls']
+        client = new_client(config, config=sqlalchemy_config)
+        # Register bean, not a lazy registration
+        bean_factory.register_bean(name=config.name or name, cls=client, primary=config.primary, lazy=False)
